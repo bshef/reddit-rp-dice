@@ -41,7 +41,7 @@ def parseCommentForCommand(comment):
     result = parser.parseForCommand(body)
     print 'Parse comment for command result: {0}'.format(result)
     if result is not None:
-        msg = '/u/{0} {1}  \nResult: {1}'.format(comment.author, body, result)
+        msg = '>/u/{0} {1}  \nResult: {2}'.format(comment.author, body, result)
         reply = comment.reply(msg)
         print 'Replied to comment {0} by {1} with reply {2}: {3}'.format(comment.id, comment.author, reply.id, reply.body)
     else:
@@ -54,7 +54,7 @@ def scanComments(submission):
     comments = praw.helpers.flatten_tree(submission.comments)
     print ' ... found {0} comments.'.format(len(comments))
     for comment in comments:
-        if comment.id not in processed_comments:
+        if comment.id not in processed_comments and comment.author != config.username:
             parseCommentForCommand(comment)
             processed_comments.append(comment.id)
 
@@ -63,7 +63,7 @@ def scanComments(submission):
 def scanSubredditSubmissions(subreddit):
     if(subreddit is not None):
         try:
-            new_submissions = subreddit.get_new(fetch=True)
+            new_submissions = subreddit.get_new()
             for submission in new_submissions:
                 if submission.id not in processed_submissions:
                     scanComments(submission)
@@ -80,7 +80,7 @@ def scanSubredditSubmissions(subreddit):
 def main():
     init()
     while True:
-        scanSubredditSubmissions(reddit.get_subreddit('redditrpdice', fetch=True))
+        scanSubredditSubmissions(reddit.get_subreddit('redditrpdice'))
 
 
 # Script main entry point

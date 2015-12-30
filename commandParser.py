@@ -12,9 +12,10 @@ class Parser:
     def parseForCommand(self, text):
         match = re.search(self.roll_command_regex, text)
         if(match):
-            self.parseRollCommand(text)
+            return self.parseRollCommand(text)
         else:
             print 'No commands found in: {0}'.format(text)
+            return None
 
     def parseRollCommand(self, text):
         # print 'Parsing roll command "{0}" ... '.format(text)
@@ -32,4 +33,3 @@ class Parser:
             return result
         else:
             print 'Invalid roll command syntax'
-            return None

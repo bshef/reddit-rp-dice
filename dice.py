@@ -37,3 +37,6 @@ def roll(number, sides, operator, modifier):
         #print 'Modifying total of {0} by {1} {2}'.format(result, operator, modifier)
         result = applyModifierToResult(result, operator, modifier)
     return result
+
+def test():
+    return 'What is love?'
