@@ -2,6 +2,7 @@ import praw
 import OAuth2Util
 from pprint import pprint
 import time
+import os
 from commandParser import Parser
 import config
 
@@ -30,8 +31,15 @@ class Bot:
                 self.logged_in = self.reddit.is_oauth_session() and self.reddit.get_me() is not None
                 time.sleep(1)
         else:
-            print 'Using username & password to log in to Reddit ... '
-            self.reddit.login(username=config.username, password=config.password, disable_warning=True)
+
+            username = os.environ['REDDIT_USER']
+            password = os.environ['REDDIT_PASS']
+            if username is None:
+                username = config.username
+            if password is None:
+                password = config.password
+            print 'Logging in to Reddit with username {0} & password... '.format(username)
+            self.reddit.login(username=username, password=password, disable_warning=True)
             while not self.logged_in:
                 self.logged_in = self.reddit.is_logged_in()
                 time.sleep(1)
