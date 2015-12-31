@@ -1,5 +1,5 @@
 import re
-import dice
+from dice import Dice
 
 # !roll
 roll_command_regex = re.compile(ur'(?P<roll_command>^[!]\w+)', re.IGNORECASE)
@@ -30,7 +30,7 @@ class Parser:
             modifier_value = match.group('modifier_value')
 
             # print 'Match: {0}'.format(match.group())
-            return dice.roll(number_of_dice, dice_sides, modifier_operator, modifier_value)
+            return Dice.roll(number_of_dice, dice_sides, modifier_operator, modifier_value)
         else:
             print 'Invalid roll command syntax'
             return None
