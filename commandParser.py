@@ -9,17 +9,19 @@ class Parser:
     def __init__(self):
         self.roll_command_regex = roll_command_regex
 
-    def parseForCommand(self, text):
-        match = re.search(self.roll_command_regex, text)
-        if(match):
-            return self.parseRollCommand(text)
+    @staticmethod
+    def parse_for_command(text):
+        if re.search(roll_command_regex, text):
+            return Parser.parse_roll_command(text)
         else:
-            print 'No commands found in: {0}'.format(text)
             return None
 
-    def parseRollCommand(self, text):
+    @staticmethod
+    def parse_roll_command(text):
         # print 'Parsing roll command "{0}" ... '.format(text)
-        regex = re.compile(ur'(?P<roll_command>^[!]\w+)\s*(?P<number_of_dice>\d+)[d](?P<dice_sides>\d+)\s*(?P<modifier>(?P<modifier_operator>[-+*/])\s*(?P<modifier_value>\d+))*', re.IGNORECASE)
+        regex = re.compile(ur'(?P<roll_command>^[!]\w+)\s*'
+                           ur'(?P<number_of_dice>\d+)[d](?P<dice_sides>\d+)\s*'
+                           ur'(?P<modifier>(?P<modifier_operator>[-+*/])\s*(?P<modifier_value>\d+))*', re.IGNORECASE)
         match = re.search(regex, text)
         if match:
             number_of_dice = match.group('number_of_dice')
@@ -28,8 +30,7 @@ class Parser:
             modifier_value = match.group('modifier_value')
 
             # print 'Match: {0}'.format(match.group())
-            result = dice.roll(number_of_dice, dice_sides, modifier_operator, modifier_value)
-            print 'Roll Command Result: {0}'.format(result)
-            return result
+            return dice.roll(number_of_dice, dice_sides, modifier_operator, modifier_value)
         else:
             print 'Invalid roll command syntax'
+            return None

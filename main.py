@@ -4,7 +4,7 @@ import praw
 import OAuth2Util
 from pprint import pprint
 import time
-import commandParser
+from commandParser import Parser
 import config
 
 class Bot:
@@ -12,14 +12,12 @@ class Bot:
     subreddit_name = ''
     is_logged_in = False
     need_to_exit = False
-    parser = None
     reddit = None
     oauth = None
     processed_submissions = []
     processed_comments = []
 
     def __init__(self, subreddit_name):
-        self.parser = commandParser.Parser()
         self.reddit = praw.Reddit(user_agent=config.user_agent)
         self.subreddit_name = subreddit_name
         self.login()
@@ -39,14 +37,11 @@ class Bot:
     # Parse a comment's body text for a command
     def parseCommentForCommand(self, comment):
         body = comment.body
-        result = self.parser.parseForCommand(body)
-        print 'Parse comment for command result: {0}'.format(result)
+        result = Parser.parse_for_command(body)
         if result is not None:
-            msg = '>/u/{0} {1}  \nResult: {2}'.format(comment.author, body, result)
+            msg = '>/u/{0} {1}  \n  \nResult: **{2}**'.format(comment.author, body, result)
             reply = comment.reply(msg)
-            print 'Replied to comment {0} by {1} with reply {2}: {3}'.format(comment.id, comment.author, reply.id, reply.body)
-        else:
-            print 'NO COMMAND FOUND in: \t\t {0}'.format(body)
+            print 'Replied to comment {0} by {1} with reply{2}:\n{3}\n'.format(comment.id, comment.author, reply.id, reply.body)
 
     # Scan all comments (flattened) under a submission
     def scanComments(self, submission):
