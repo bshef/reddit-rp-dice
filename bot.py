@@ -8,7 +8,6 @@ import config
 
 class Bot:
     # Class fields
-    subreddit_name = ''
     logged_in = False
     need_to_exit = False
     reddit = None
@@ -16,9 +15,8 @@ class Bot:
     processed_submissions = []
     processed_comments = []
 
-    def __init__(self, subreddit_name):
+    def __init__(self):
         self.reddit = praw.Reddit(user_agent=config.user_agent)
-        self.subreddit_name = subreddit_name
         self.login()
 
     # Log in as a Reddit client
@@ -79,7 +77,7 @@ class Bot:
         attempt = 1
         max_attempts = 30
         while not self.need_to_exit:
-            subreddit = self.reddit.get_subreddit(self.subreddit_name)
+            subreddit = self.reddit.get_subreddit(config.subreddit_name)
             if subreddit:
                 self.scan_submissions(subreddit)
                 print 'Sleeping for {0} seconds ... '.format(config.sleep_seconds)
@@ -88,7 +86,7 @@ class Bot:
                 if attempt < max_attempts:
                     attempt += 1
                     print 'Attempting to connect to subreddit {0} (try {1}/{2})... '.format(
-                        self.subreddit_name, attempt, max_attempts)
+                        config.subreddit_name, attempt, max_attempts)
                     time.sleep(1)
                 else:
                     self.need_to_exit = True
