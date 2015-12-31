@@ -1,1 +1,6 @@
 reddit-rp-dice
+praw==3.3.0
+praw-oauth2util==0.3.3
+virtualenv==13.1.2
+websocket-client==0.32.0
+
