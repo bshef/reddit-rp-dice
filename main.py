@@ -3,7 +3,7 @@ from bot import Bot
 
 # Main logic
 def main():
-    bot = Bot('redditrpdice')
+    bot = Bot()
     bot.work()
 
 # Script main entry point
